@@ -1,5 +1,5 @@
-// define the list
-var stack = new Stack(10);
+// define the stack
+var stack = new Stack();
 
 function addCol(value) {
 	var t = document.getElementById("row");
@@ -15,11 +15,13 @@ function addCol(value) {
 
 var defaultValueCounter = 0;
 function push() {
+	stack=new Stack();
 	var value = document.getElementById("add").value;
 	if (value === "") {
 		defaultValueCounter++;
 		value = defaultValueCounter;
 	}
+	console.log(stack+", "+value)
 	stack.push(value);
 	addCol(value);
 
@@ -27,6 +29,7 @@ function push() {
 }
 
 function pop() {
+	stack=new Stack();
 	setTimeout(function() {
 		try {
 			var value = stack.pop();
@@ -37,17 +40,18 @@ function pop() {
 	}, 200)
 }
 
-function findMin() {
-	var value = stack.minValue();
-	highlightCol(value, "min");
-
+function top() {
+	stack=new Stack();
+	setTimeout(function() {
+		try {
+			var value = stack.top();
+		} catch (e) {
+			showMessage("#status", "No top", "red")
+		}
+	}, 200)
 }
 
-function findMax() {
-	var value = stack.maxValue();
-	highlightCol(value, "max");
 
-}
 
 function highlightCol(value, css) {
 	$("#" + value).animate({

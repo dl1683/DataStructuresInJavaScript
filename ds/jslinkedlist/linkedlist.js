@@ -9,13 +9,13 @@ function Node() {
 
 Node.prototype.insert = function(value) {
 	var current = this;
-	if (current.value === undefined) {
-		current.value = value;
+	if (current.value === undefined) { //has nothing yet
+		current.value = value; //insert here
 		return;
 	}
 	
-	if(current.next === undefined) {
-		current.next = new Node();
+	if(current.next === undefined) { //completely null
+		current.next = new Node();//want new node
 	}
 	var c = current.next;
 	c.insert(value);
@@ -152,7 +152,7 @@ Linkedlist.prototype.search = function(value, progressCallBack, postCallBack) {
 		return this.head;
 	}
 	
-	
+
 	var current = this.head.next;
 	var found = false;
 	while(current !== undefined) {

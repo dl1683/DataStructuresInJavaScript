@@ -25,11 +25,6 @@
 			value = defaultValueCounter;
 		}
 		
-		if(value >12 ) {
-			alert("Sorry a maximum of 12 nodes allowed")
-			return;
-		}
-		
 		if($("#insertType")[0].checked === true) {
 			list.insertAtFront(value, addCol);
 		}else {

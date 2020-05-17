@@ -1,55 +1,59 @@
-function Stack(max) {
-	var counter = 0;
-	var items = [];
-	var max = max;
-	var minValue = -1;
-	var maxValue = -1;
-	
-	this.push = function(value) {
-		counter ++;
-		if(counter > max) {
-		    throw "stack overflow"
-		}
-		
-		if (minValue === -1 || value < minValue) {
-			minValue = value;
-		}
-
-		if (minValue === -1 || value > maxValue) {
-			maxValue = value;
-		}
-
-		items[counter] = value;
-		return value;
-	}
-
-	this.pop = function() {
-		if(counter < 0) {
-			minValue = -1;
-			maxValue = -1;
-			throw "stack underflow"
-		}
-		var value = items[counter];
-		delete items[counter];
-		counter --;
-		
-		return value;
-		
-	}
-
-	this.print = function() {
-		for(var i=0; i < counter; i++) {
-			console.log(items[i]);
-		}
-	}
-
-	this.minValue = function() {
-		return minValue
-	}
-
-	this.maxValue = function() {
-		return maxValue;
-	}
-
+function Node() {
+	this.value;
+	this.next ;
 }
 
+var Stack= function(){
+	this.min;
+	this.max;
+	this.head;
+}
+
+Node.prototype.insert=function(value) {
+	var current = this;
+	if (current.value === undefined) { //has nothing yet
+		current.value = value; //insert here
+		return;
+	}
+	
+	if(current.next === undefined) { //completely null
+		current.next = new Node();//want new node
+	}
+	var c = current.next;
+	c.insert(value);
+}
+
+Stack.prototype.push= function(value) {
+	if(value==undefined || value==""){
+		throw "Please input proper value (number)"
+	}
+	if(this.head==undefined){//nothing exists yet
+		this.head=new Node();
+		this.head.value=value;
+	}else{//nonempty stack
+		var c=this.head;
+		c.next=this.head;
+		c.value=value;
+		this.head=c
+	}	
+}
+
+
+Stack.prototype.top= function() {	
+	if(this.head==undefined){//nothing exists yet
+		throw "Trying to get top of null"
+	}else{//nonempty stack
+		return this.head.value;
+	}	
+}
+
+Stack.prototype.pop= function() {
+	
+	if(this.head==undefined){//nothing exists yet
+		throw "Trying to get top of null"
+	}else{//nonempty stack
+		var val=this.head.value;
+		this.head=this.head.next;
+		return val;
+	}	
+}
