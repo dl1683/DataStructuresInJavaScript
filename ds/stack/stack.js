@@ -1,5 +1,5 @@
 function Stack(max) {
-	var counter = -1;
+	var counter = 0;
 	var items = [];
 	var max = max;
 	var minValue = -1;

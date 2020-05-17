@@ -152,6 +152,7 @@ Linkedlist.prototype.search = function(value, progressCallBack, postCallBack) {
 		return this.head;
 	}
 	
+	
 	var current = this.head.next;
 	var found = false;
 	while(current !== undefined) {
