@@ -1,5 +1,5 @@
-// define the stack
-var stack = new Stack();
+// define the queue
+var queue = new Queue();
 
 
 function addCol(value) {
@@ -10,32 +10,32 @@ function addCol(value) {
 	td.setAttribute("class", "highlight custom")
 	td.innerHTML = value;
 	tr.appendChild(td);
-	$("#row").prepend(tr);
+	$("#row").append(tr);
 
 }
 
 var defaultValueCounter = 0;
-function push() {
+function enqueue() {
 	var value = document.getElementById("add").value;
 	if (value === "" || value == NaN || value == 'NaN') {
 		defaultValueCounter++;
 		value = 0;
 	} else {
 		console.log("Pushing" + ", " + value)
-		stack.push(value);
+		queue.push(value);
 		addCol(value);
 	}
-	//stack.print();
+	//queue.print();
 	document.getElementById("add").value = "";
 
 }
 
-function pop() {
-	//stack=new Stack();
+function dequeue() {
+	//queue=new Stack();
 	setTimeout(function () {
 		try {
-			var value = stack.pop();
-			console.log(stack + ", " + value);
+			var value = queue.pop();
+			console.log( "dequeued, " + value);
 			removeCol(value);
 		} catch (e) {
 			showMessage("#status", "Underflow", "red")
@@ -44,21 +44,32 @@ function pop() {
 }
 
 function peek() {
-	//stack=new Stack();
+	//queue=new Stack();
 	setTimeout(function () {
 		try {
-			var value = stack.top();
+			var value = queue.top();
 			console.log(value)
-			//alert("Top is: " +value)
+			alert("Top is: " +value)
 			highlightCol(value, "")
-			showMessage("#status", "Top is: "+value, "red")
-
 		} catch (e) {
 			showMessage("#status", "No top", "red")
 		}
 	}, 200)
 }
 
+function tail() {
+	//queue=new Stack();
+	//setTimeout(function () {
+		try {
+			var value = queue.back();
+			console.log(value)
+			alert("Tail is: " +value)
+			highlightCol(value, "")
+		} catch (e) {
+			showMessage("#status", "No tail", "red")
+		}
+	//}, 200)
+}
 
 
 function highlightCol(value, css) {
@@ -67,7 +78,7 @@ function highlightCol(value, css) {
 	});
 	setTimeout(function () {
 		$("#" + value).find('td').addClass("hightlight");
-		//showMessage("#status", "Finished", "green")
+		showMessage("#status", "Finished", "green")
 	}, 500);
 }
 
