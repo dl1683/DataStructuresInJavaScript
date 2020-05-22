@@ -3,11 +3,15 @@ var hashTable = new HashTable();
 function initTable() {
 	var bucketCount = 0;
 	var t = document.getElementById("hashtable");
-	for (var j = 1; j <= 2; j++) {
+	// for (var j = 1; j <= 2; j++) {
+	// 	var tr = document.createElement("tr");
+	// 	for (var i = 1; i <= 2; i++) {
+	for (var j = 0; j < 2; j++) {
 		var tr = document.createElement("tr");
-		for (var i = 1; i <= 2; i++) {
+		for (var i = 0; i < 2; i++) {
 			var td = document.createElement("td");
 			td.setAttribute("id", ++bucketCount);
+			// td.setAttribute("id", bucketCount);
 			tr.appendChild(td);
 		}
 		t.appendChild(tr);
@@ -15,21 +19,29 @@ function initTable() {
 }
 initTable()
 
-function drawRehash(side) { //for rehashing
+function drawRehash(prev, side, c) { //for rehashing
 	var bucketCount = 0;
 	var t = document.getElementById("hashtable");
-	while(t.hasChildNodes()){
+	while (t.hasChildNodes()) {
 		t.removeChild(t.firstChild);
 	}
 	//t=null;
-	for (var j = 1; j <= side; j++) {
+	console.log("Rehashing: " + prev + " " + side)
+	//console.table(t);
+	// for (var j = prev ; j < side; j++) {
+	// 	var tr = document.createElement("tr");
+	// 	for (var i = prev ; i < side; i++) {
+	for (var j = 0; j < side; j++) {
 		var tr = document.createElement("tr");
-		for (var i = 1; i <= side; i++) {
-			var td = document.createElement("td");
-			td.setAttribute("id", ++bucketCount);
-			tr.appendChild(td);
-		}
-		t.appendChild(tr);
+		for (var i = 0; i < side; i++) {
+	var td = document.createElement("td");
+	td.setAttribute("id", ++bucketCount);
+	// td.setAttribute("id", bucketCount);
+	tr.appendChild(td);
+}
+console.log(tr);
+t.appendChild(tr);
+		//console.table(t)
 	}
 }
 
@@ -44,27 +56,34 @@ function add() {
 		alert("Please enter valid keys and values")
 		return;
 	}
-	var vals= hashTable.put(key, value);
-	index=vals[0]
-	var rehashed=vals[1];
-	if(rehashed==true){
-		alert("Rehashing table with new size: "+vals[2])
-		drawRehash(vals[2])
-	}
+	var prev = hashTable.bucketSize ** 0.5;
+	var vals = hashTable.put(key, value);
+	index = vals[0]
+	console.log("In: " + hashTable.in)
+	//console.log("Table before drawing: ")
+	//console.table(document.getElementById("hashtable"))
+	hashTable.print()
 	// add the callbacks
 	eventList.push(addEvent)
 	eventList.push(beginProgress)
 	eventList
-			.push(function() {
-				$("#progress")
-						.fadeIn("slow")
-						.html(
-								"<img src='../images/loading.gif' width='150' height='80' /><br />")
-			})
+		.push(function () {
+			$("#progress")
+				.fadeIn("slow")
+				.html(
+					"<img src='../images/loading.gif' width='150' height='80' /><br />")
+		})
 	eventList.push(showCalculatedPos)
 	eventList.push(animateCol);
 	// now animate
 	animate(eventList);
+	var rehashed = vals[1];
+	if (rehashed == true) {
+		alert("Drawing Rehashing table with new size: " + vals[2])
+		drawRehash(prev, vals[2], hashTable.in)
+	}
+	animate(eventList);
+
 }
 
 function search() {
@@ -112,53 +131,53 @@ function remove() {
 
 function addEvent(key, value) {
 	var html = "Inserting<br /> <code>Key: " + $("#key").val()
-			+ " </code><br /><code>Value: " + $("#value").val() + " </code>"
+		+ " </code><br /><code>Value: " + $("#value").val() + " </code>"
 	$("#itemStaged").animate({
-		opacity : 0
-	}, 800, function() {
+		opacity: 0
+	}, 800, function () {
 		$("#itemStaged").animate({
-			opacity : 1000
+			opacity: 1000
 		});
 		$("#itemStaged").html(html);
 	});
-	
-	
-	
-	
+
+
+
+
 }
 
 function beginProgress() {
 	$("#progress").fadeIn("slow").html(
-			"Using a hash function to compute the bucket location...");
+		"Using a hash function to compute the bucket location...");
 }
 
 function showCalculatedPos() {
 	$("#progress").fadeIn("slow").html(
-			"Position Identified at Index: " + (index)).addClass("green");
+		"Position Identified at Index: " + (index)).addClass("green");
 }
 
 function animateCol() {
 	$("#" + (index)).animate(
-			{
-				opacity : 0
-			},
-			800,
-			function() {
-				$("#" + (index)).animate({
-					opacity : 100
-				});
-				$("#" + (index)).addClass("focus");
-				$("#" + (index)).html(
-						"k: " + $("#key").val() + "<br/ > v: "
-								+ $("#value").val());
-				$("#" + (index)).addClass("selected");
-				reset();
+		{
+			opacity: 0
+		},
+		800,
+		function () {
+			$("#" + (index)).animate({
+				opacity: 100
 			});
+			$("#" + (index)).addClass("focus");
+			$("#" + (index)).html(
+				"k: " + $("#key").val() + "<br/ > v: "
+				+ $("#value").val());
+			$("#" + (index)).addClass("selected");
+			reset();
+		});
 }
 
 function highlightCol() {
 	$("#" + index).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100)
-			.fadeIn(100);
+		.fadeIn(100);
 }
 
 function removeCol() {
@@ -181,9 +200,10 @@ function animate(list) {
 		return;
 	}
 	var event = list.shift();
+	//console.log("Event: " + event)
 	event();
 
-	setTimeout(function() {
+	setTimeout(function () {
 		animate(list);
 	}, 2000);
 }

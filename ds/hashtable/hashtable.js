@@ -14,6 +14,7 @@ var Entry = function(k, v) {
 	this.value = v
 }
 
+
 // var getHash = function(str, max){
 //     var hash = 0;
 //     for (var i = 0; i < str.length; i++) {
@@ -28,7 +29,7 @@ var Entry = function(k, v) {
 
 // My simple hash implementation
 var getHash = function (key, max) {
-	return (key % max);
+	return (key % max)+1;
 }
 
 HashTable.prototype.isEmpty = function () {
@@ -62,12 +63,13 @@ HashTable.prototype.put = function (key, value) {
            this.array=newTable.array;
            this.in=newTable.in;
            hash = getHash(key, this.bucketSize);
+           console.log(this.bucketSize**0.5)
      }
      return [hash,rehashed,this.bucketSize**0.5];
 }
 
 HashTable.prototype.rehash=function(){
-      var newTable=new HashTable(this.bucketSize*2);
+      var newTable=new HashTable((this.bucketSize**0.5)*2);
       console.log("Doubled from: "+this.bucketSize+" to "+newTable.bucketSize)
       //var hash;
       for(var i=0;i<this.bucketSize;i++){
