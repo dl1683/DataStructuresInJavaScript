@@ -3,9 +3,9 @@ var hashTable = new HashTable();
 function initTable() {
 	var bucketCount = 0;
 	var t = document.getElementById("hashtable");
-	for (var j = 1; j <= 5; j++) {
+	for (var j = 1; j <= 2; j++) {
 		var tr = document.createElement("tr");
-		for (var i = 1; i <= 5; i++) {
+		for (var i = 1; i <= 2; i++) {
 			var td = document.createElement("td");
 			td.setAttribute("id", ++bucketCount);
 			tr.appendChild(td);
@@ -15,18 +15,42 @@ function initTable() {
 }
 initTable()
 
+function drawRehash(side) { //for rehashing
+	var bucketCount = 0;
+	var t = document.getElementById("hashtable");
+	while(t.hasChildNodes()){
+		t.removeChild(t.firstChild);
+	}
+	//t=null;
+	for (var j = 1; j <= side; j++) {
+		var tr = document.createElement("tr");
+		for (var i = 1; i <= side; i++) {
+			var td = document.createElement("td");
+			td.setAttribute("id", ++bucketCount);
+			tr.appendChild(td);
+		}
+		t.appendChild(tr);
+	}
+}
+
 var eventList = []
 var index = -1;
+
 function add() {
 
 	var key = $("#key").val();
 	var value = $("#value").val();
 	if (key === "" || value === "") {
+		alert("Please enter valid keys and values")
 		return;
 	}
-
-	index = hashTable.put(key, value);
-
+	var vals= hashTable.put(key, value);
+	index=vals[0]
+	var rehashed=vals[1];
+	if(rehashed==true){
+		alert("Rehashing table with new size: "+vals[2])
+		drawRehash(vals[2])
+	}
 	// add the callbacks
 	eventList.push(addEvent)
 	eventList.push(beginProgress)
