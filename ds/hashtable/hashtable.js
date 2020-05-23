@@ -49,7 +49,6 @@ HashTable.prototype.put = function (key, value) {
      while (this.array[hash] !== undefined && this.array[hash].key !== key)
            hash = (hash + 1) % this.bucketSize; //liner probing
      
-     this.array[hash] = new Entry(key, value);
      if(replaced==false){
             this.in=this.in+1; //add another entry
      }
@@ -57,7 +56,7 @@ HashTable.prototype.put = function (key, value) {
      if(this.in/this.bucketSize>=0.7){
            var newTable=new HashTable(this.bucketSize*2)
            newTable= this.rehash();
-           console.log("rehashed for "+this.in+" "+this.bucketSize+" "+ this.in/this.bucketSize)
+           //console.log("rehashed for "+this.in+" "+this.bucketSize+" "+ this.in/this.bucketSize)
            rehashed=true;
            this.bucketSize=newTable.bucketSize;
            this.array=newTable.array;
@@ -65,12 +64,14 @@ HashTable.prototype.put = function (key, value) {
            hash = getHash(key, this.bucketSize);
            console.log(this.bucketSize**0.5)
      }
+     this.array[hash] = new Entry(key, value);
+
      return [hash,rehashed,this.bucketSize**0.5];
 }
 
 HashTable.prototype.rehash=function(){
       var newTable=new HashTable((this.bucketSize**0.5)*2);
-      console.log("Doubled from: "+this.bucketSize+" to "+newTable.bucketSize)
+      //console.log("Doubled from: "+this.bucketSize+" to "+newTable.bucketSize)
       //var hash;
       for(var i=0;i<this.bucketSize;i++){
             if(this.array[i]!=undefined){
@@ -95,7 +96,8 @@ HashTable.prototype.get = function (key) {
 HashTable.prototype.remove = function (key) {
 	var hash = this.get(key);
 	this.array[hash] = undefined;
-	this.print();
+      this.print();
+      this.in=this.in-1;
 	return hash;
 }
 

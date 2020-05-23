@@ -1,5 +1,7 @@
 var hashTable = new HashTable();
-
+var keysDone = []
+var valuesAdded=[]
+var idxs=[]
 function initTable() {
 	var bucketCount = 0;
 	var t = document.getElementById("hashtable");
@@ -22,26 +24,30 @@ initTable()
 function drawRehash(prev, side, c) { //for rehashing
 	var bucketCount = 0;
 	var t = document.getElementById("hashtable");
+
 	while (t.hasChildNodes()) {
+		//console.log("First: "+t)
 		t.removeChild(t.firstChild);
 	}
-	//t=null;
-	console.log("Rehashing: " + prev + " " + side)
-	//console.table(t);
-	// for (var j = prev ; j < side; j++) {
-	// 	var tr = document.createElement("tr");
-	// 	for (var i = prev ; i < side; i++) {
+
+	//console.log("Rehashing: " + prev + " " + side)
+	
+	
 	for (var j = 0; j < side; j++) {
 		var tr = document.createElement("tr");
 		for (var i = 0; i < side; i++) {
-	var td = document.createElement("td");
-	td.setAttribute("id", ++bucketCount);
-	// td.setAttribute("id", bucketCount);
-	tr.appendChild(td);
-}
-console.log(tr);
-t.appendChild(tr);
-		//console.table(t)
+			var td = document.createElement("td");
+			td.setAttribute("id", ++bucketCount);
+			// td.setAttribute("id", bucketCount);
+			tr.appendChild(td);
+		}
+		t.appendChild(tr);
+	}
+
+	for(var i=0;i<keysDone.length;i++){
+		//console.log("Groovy baby: "+keysDone[i]+","+valuesAdded[i])
+		showCalculatedPos(keysDone[i]);
+		animateColCool(idxs[i],keysDone[i],valuesAdded[i])
 	}
 }
 
@@ -52,6 +58,7 @@ function add() {
 
 	var key = $("#key").val();
 	var value = $("#value").val();
+	console.log("Trying to add "+key+":"+value)
 	if (key === "" || value === "") {
 		alert("Please enter valid keys and values")
 		return;
@@ -59,7 +66,10 @@ function add() {
 	var prev = hashTable.bucketSize ** 0.5;
 	var vals = hashTable.put(key, value);
 	index = vals[0]
-	console.log("In: " + hashTable.in)
+	idxs.push(index)
+	keysDone.push(key)
+	valuesAdded.push($("#value").val())
+	//console.log("In: " + hashTable.in)
 	//console.log("Table before drawing: ")
 	//console.table(document.getElementById("hashtable"))
 	hashTable.print()
@@ -73,8 +83,8 @@ function add() {
 				.html(
 					"<img src='../images/loading.gif' width='150' height='80' /><br />")
 		})
-	eventList.push(showCalculatedPos)
-	eventList.push(animateCol);
+	eventList.push(showCalculatedPos(index))
+	eventList.push(animateCol(index));
 	// now animate
 	animate(eventList);
 	var rehashed = vals[1];
@@ -82,7 +92,9 @@ function add() {
 		alert("Drawing Rehashing table with new size: " + vals[2])
 		drawRehash(prev, vals[2], hashTable.in)
 	}
-	animate(eventList);
+	
+	console.log("Keys: "+ keysDone);
+	console.log("Values: "+valuesAdded)
 
 }
 
@@ -121,8 +133,8 @@ function remove() {
 	}
 
 	// add the callbacks
-	eventList.push(highlightCol);
-	eventList.push(removeCol);
+	eventList.push(highlightCol(index));
+	eventList.push(removeCol(index));
 	// now animate
 	animate(eventList);
 
@@ -151,12 +163,33 @@ function beginProgress() {
 		"Using a hash function to compute the bucket location...");
 }
 
-function showCalculatedPos() {
+function showCalculatedPos(index) {
 	$("#progress").fadeIn("slow").html(
 		"Position Identified at Index: " + (index)).addClass("green");
 }
 
-function animateCol() {
+function animateColCool(index,k,v) {
+	console.log("Here at the cool animation")
+	$("#" + (index)).animate(
+		{
+			opacity: 0
+		},
+		800,
+		function () {
+			$("#" + (index)).animate({
+				opacity: 100
+			});
+			$("#" + (index)).addClass("focus");
+			$("#" + (index)).html(
+				"k: " + k + "<br/ > v: "
+				+ v);
+			$("#" + (index)).addClass("selected");
+			reset();
+		});
+}
+
+function animateCol(index) {
+	console.log("Here at the old animation")
 	$("#" + (index)).animate(
 		{
 			opacity: 0
@@ -175,12 +208,12 @@ function animateCol() {
 		});
 }
 
-function highlightCol() {
+function highlightCol(index) {
 	$("#" + index).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100)
 		.fadeIn(100);
 }
 
-function removeCol() {
+function removeCol(index) {
 	$("#" + index).removeClass("focus selected");
 	$("#" + index).html("");
 }
@@ -201,7 +234,7 @@ function animate(list) {
 	}
 	var event = list.shift();
 	//console.log("Event: " + event)
-	event();
+	event;
 
 	setTimeout(function () {
 		animate(list);
