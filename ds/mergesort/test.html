@@ -119,6 +119,7 @@ function add() {
 
 function range() {
     console.log("Ranging")
+    //location.reload();
     var value = document.getElementById("rangeItem").value;
     //var tempArr=[]
     if (value === "") {
@@ -179,6 +180,7 @@ function declare(count){
 }
 
 function reset() {
+    location.reload();
     unsortedArray = [...array];
     sortedArray = [];
     stop = false;
