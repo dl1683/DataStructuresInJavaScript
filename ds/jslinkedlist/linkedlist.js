@@ -49,6 +49,7 @@ Linkedlist.prototype.insertAtFront = function(value, callback) {
 	}
 }
 
+
 Linkedlist.prototype.insert = function(value, callback) {
 	
 	if(value === undefined) {
@@ -92,11 +93,12 @@ Linkedlist.prototype.print = function() {
 }
 
 Linkedlist.prototype.remove = function(value, progressCallBack, postCallBack) {
+	
 	if(this.head === undefined) {
 		return;
 	}
 	
-	if(this.head.value !== undefined && typeof progressCallBack === "function") {
+	if(typeof progressCallBack === "function") {
 		progressCallBack(this.head.value);
 	}
 	
@@ -105,6 +107,7 @@ Linkedlist.prototype.remove = function(value, progressCallBack, postCallBack) {
 		if(typeof postCallBack === "function") {
 			postCallBack();
 		}
+		//curr=this.head.value
 		this.head = this.head.next;
 		return this.head;
 	}
@@ -127,6 +130,7 @@ Linkedlist.prototype.remove = function(value, progressCallBack, postCallBack) {
 	}
 	
 	if(found && typeof postCallBack === "function") {
+		console.log("Thing: "+current.value)
 		postCallBack(current.value);
 		prev.next = current.next;
 		return current;

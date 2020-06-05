@@ -57,6 +57,8 @@
 			return;
 		}
 		var n = list.remove(value, searchHighlight, removeEffect);
+		console.log("First: "+n.value)
+
 		if(n === undefined) {
 			 showMessage("#status", "Element not found..", "red")
 			 visitedNodes = [];
@@ -72,6 +74,7 @@
 	var visitedNodes =[]
 	function searchHighlight(value) {
 		visitedNodes.push($("#"+value))
+		console.log(visitedNodes)
 	}
 	
 	function startChain() {
