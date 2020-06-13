@@ -21,6 +21,7 @@
       <td>Len</td>
       <td><input type="number" id="len" placeholder="Insert length of randomized array"></input>
         <button id="click">Generate Arr of Length</button></td>
+        <button id="Refresh" onclick="refresh()">Refresh</button></td>
     </tr>
   </table>
 
@@ -39,6 +40,10 @@
 <script type="text/javascript">
   var myLink = document.getElementById('click');
 
+  function refresh(){
+    location.reload();
+
+  }
   myLink.onclick = function () {
 
     var script = document.createElement("script");
